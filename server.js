@@ -5,7 +5,20 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 const app = express();
-app.use(cors({ origin: '*' }));
+
+const allowedOrigins = ['http://localhost:5173', 'https://satishkhanal76.github.io'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+}));
+
+
 app.use(express.json());
 
 app.post('/contact', async (req, res) => {
